@@ -18,5 +18,8 @@ export default defineNuxtConfig({
 		experimental: {
 			websocket: true,
 		},
+		rollupConfig: {
+			external: ['pg:native'],
+		},
 	},
 })
