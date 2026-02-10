@@ -19,7 +19,12 @@ export default defineNuxtConfig({
 			websocket: true,
 		},
 		rollupConfig: {
-			external: ['pg:native'],
+			external: ['pg-native', 'cloudflare:sockets'],
+		},
+		preset: 'cloudflare-module',
+		cloudflare: {
+			deployConfig: true,
+			nodeCompat: true,
 		},
 	},
 })
