@@ -31,8 +31,14 @@ export default defineNuxtConfig({
 			esmImport: true,
 			lazy: true,
 		},
+		externals: {
+			external: ['@prisma/client', '#shared/types/prisma'],
+		},
 	},
 	experimental: {
 		nitroAutoImports: true,
+	},
+	alias: {
+		'#prisma': './shared/types/prisma',
 	},
 })
