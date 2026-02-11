@@ -58,3 +58,17 @@ pnpm preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Directories
+
+### /app
+
+The primary directory for client-side logic. It houses pages, components, composables, and other assets essential to the frontend user experience.
+
+### /server
+
+Dedicated to backend logic, including API route handling, server-side middleware, and WebSocket management.
+
+### /shared
+
+A collaborative space for logic and utilities shared between the `/app` and `/server` directories, ensuring code reusability and a single source of truth.

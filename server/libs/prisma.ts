@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from '~~/shared/types/prisma/client'
+import { PrismaClient } from '#shared/types/prisma/client'
 
 export default function () {
 	const config = useRuntimeConfig()

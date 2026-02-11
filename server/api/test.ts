@@ -1,3 +1,3 @@
-export default defineEventHandler(() => ({
-	message: 'This is a test api',
-}))
+export default defineEventHandler(() => {
+	return 'Working....'
+})
