@@ -12,11 +12,12 @@ export default defineNuxtConfig({
 	},
 	compatibilityDate: '2025-01-15',
 	runtimeConfig: {
-		database_url: process.env.DB_URL ?? '',
+		database_url: `${process.env.DB_URL}`,
 	},
 	nitro: {
 		experimental: {
 			websocket: true,
+			wasm: true,
 		},
 		rollupConfig: {
 			external: ['pg-native', 'cloudflare:sockets'],
@@ -26,5 +27,12 @@ export default defineNuxtConfig({
 			deployConfig: true,
 			nodeCompat: true,
 		},
+		wasm: {
+			esmImport: true,
+			lazy: true,
+		},
+	},
+	experimental: {
+		nitroAutoImports: true,
 	},
 })

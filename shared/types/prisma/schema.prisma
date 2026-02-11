@@ -1,0 +1,145 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../shared/types/prisma"
+  previewFeatures = ["fullTextSearchPostgres", "driverAdapters"]
+  moduleFormat    = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              Int               @id @default(autoincrement())
+  first_name      String
+  middle_name     String?
+  last_name       String
+  email           String            @unique
+  password        String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  deleted_at      DateTime?
+  roles           Role[]            @relation("user_roles")
+  permissions     Permission[]      @relation("user_permissions")
+  messages        Message[]
+  contacts        Contact[]         @relation("user_contacts")
+  contactRequests ContactRequest[]
+  contactSettings ContactSettings[]
+}
+
+model Branch {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  status     String    @default("OPEN")
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  deleted_at  DateTime?
+  users       User[]       @relation("user_roles")
+  permissions Permission[] @relation("role_permissions")
+}
+
+model Permission {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  deleted_at  DateTime?
+  roles       Role[]    @relation("role_permissions")
+  users       User[]    @relation("user_permissions")
+}
+
+model Theme {
+  id            Int       @id @default(autoincrement())
+  name          String    @unique
+  contrast      Int?      @default(400)
+  border_radius String?   @default("sm")
+  dark_mode     Boolean?  @default(false)
+  primary       String
+  secondary     String
+  neutral       String
+  success       String
+  error         String
+  info          String
+  tertiary      String
+  warning       String
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
+}
+
+model Message {
+  id         Int       @id @default(autoincrement())
+  message    String
+  type       String?   @default("MESSAGE")
+  user       User      @relation(fields: [userId], references: [id])
+  contact    Contact?  @relation(fields: [contactId], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  userId     Int
+  contactId  Int
+
+  parent_message Message?  @relation("MessageReplies", fields: [reply_to_id], references: [id])
+  replies        Message[] @relation("MessageReplies")
+  reply_to_id    Int?
+}
+
+model Contact {
+  id              Int               @id @default(autoincrement())
+  name            String
+  recent_activity String?
+  status          String?           @default("PENDING")
+  avatar          String?           @default("no-image")
+  type            String?           @default("PRIVATE_CONTACT")
+  users           User[]            @relation("user_contacts")
+  messages        Message[]
+  contactRequests ContactRequest[]
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  deleted_at      DateTime?
+  contactSettings ContactSettings[]
+}
+
+model ContactRequest {
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
+  contact    Contact   @relation(fields: [contactId], references: [id])
+  status     String?   @default("PENDING")
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  userId     Int
+  contactId  Int
+
+  @@unique([userId, contactId])
+}
+
+model ContactSettings {
+  id              Int       @id @default(autoincrement())
+  name            String?
+  recent_activity String?
+  marked_as_read  Boolean?  @default(false)
+  muted           Boolean?  @default(false)
+  ignored         Boolean?  @default(false)
+  archived        Boolean?  @default(false)
+  pinned          Boolean?  @default(false)
+  user            User      @relation(fields: [userId], references: [id])
+  contact         Contact   @relation(fields: [contactId], references: [id])
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  deleted_at      DateTime?
+  userId          Int
+  contactId       Int
+
+  @@unique([userId, contactId])
+}

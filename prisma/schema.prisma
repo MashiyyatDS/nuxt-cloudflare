@@ -2,7 +2,8 @@ generator client {
     provider        = "prisma-client"
     output          = "../shared/types/prisma"
     previewFeatures = ["fullTextSearchPostgres", "driverAdapters"]
-    moduleFormat    = "esm"
+    moduleFormat    = "esm" 
+	runtime = "workerd"
 }
 
 datasource db {

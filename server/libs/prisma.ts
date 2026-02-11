@@ -2,9 +2,12 @@ import 'dotenv/config'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '~~/shared/types/prisma/client'
 
-const connectionString = `${process.env.DB_URL}`
+export default function () {
+	const config = useRuntimeConfig()
+	const connectionString = config.database_url
 
-const adapter = new PrismaPg({ connectionString })
-const prisma = new PrismaClient({ adapter })
+	const adapter = new PrismaPg({ connectionString })
+	const prisma = new PrismaClient({ adapter })
 
-export default prisma
+	return prisma
+}
